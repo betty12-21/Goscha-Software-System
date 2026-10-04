@@ -1,0 +1,8 @@
+color #58051b
+
+Payment Methods : need to be remove.
+
+
+New Appointment (add new customer buttom on the top of the form).
+
+supp should be inve. 
