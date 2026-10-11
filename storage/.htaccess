@@ -1,0 +1,2 @@
+# Deny all direct HTTP access — backups are served only through Settings.
+Require all denied

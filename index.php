@@ -37,7 +37,7 @@ function home_module_icon(array $module): string
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php echo e(salon_name()); ?> · <?php echo e(get_setting('salon_tagline', 'Smart Software for Beautiful Businesses.')); ?></title>
+    <title><?php echo e(app_name()); ?> · <?php echo e(get_setting('salon_tagline', 'Smart Software for Beautiful Businesses.')); ?></title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💻</text></svg>">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
@@ -51,7 +51,7 @@ function home_module_icon(array $module): string
         <div class="d-flex align-items-center justify-content-between">
             <a href="#top" class="d-flex align-items-center gap-2 fw-bold text-body">
                 <span class="brand-mark"><i class="bi bi-code-slash"></i></span>
-                <span><?php echo e(salon_name()); ?></span>
+                <span><?php echo e(app_name()); ?></span>
             </a>
 
             <div class="d-none d-lg-flex align-items-center gap-1" id="siteNav">
@@ -108,12 +108,12 @@ function home_module_icon(array $module): string
         <?php endif; ?>
         <div class="row align-items-center g-5">
             <div class="col-lg-6">
-                <span class="hero-eyebrow"><i class="bi bi-code-slash"></i> <?php echo e(salon_name()); ?></span>
+                <span class="hero-eyebrow"><i class="bi bi-code-slash"></i> <?php echo e(app_name()); ?></span>
                 <h1 class="hero-title mt-4 mb-3">
                     Salon Management, <span class="accent">End to End.</span>
                 </h1>
                 <p class="hero-text mb-4">
-                    <?php echo e(salon_name()); ?> builds an end-to-end Beauty Salon Management System —
+                    <?php echo e(app_name()); ?> builds an end-to-end Beauty Salon Management System —
                     appointments, clients, billing, inventory, payroll, and analytics in one
                     platform that runs the entire salon business.
                 </p>
@@ -128,7 +128,7 @@ function home_module_icon(array $module): string
                 <div class="book-stage">
                     <div class="book">
                         <div class="book-cover">
-                            <div class="cover-brand"><?php echo e(salon_name()); ?></div>
+                            <div class="cover-brand"><?php echo e(app_name()); ?></div>
                             <div class="cover-title mt-2">Appointment Book</div>
                             <div class="cover-sub">2026 · Beauty &amp; Wellness</div>
                         </div>
@@ -178,7 +178,7 @@ function home_module_icon(array $module): string
                 <span class="section-eyebrow">Business Overview</span>
                 <h2 class="section-title mt-2 mb-3">Software That Runs the Whole Salon</h2>
                 <p class="section-sub mb-4">
-                    <?php echo e(salon_name()); ?> is a technology company focused on one product:
+                    <?php echo e(app_name()); ?> is a technology company focused on one product:
                     an end-to-end Beauty Salon Management System. We replace paper appointment
                     books, spreadsheets, and guesswork with a single platform that manages the
                     complete daily operation of a salon — from the first booking to the final report.
@@ -292,7 +292,7 @@ function home_module_icon(array $module): string
     <div class="container">
         <div class="text-center mb-5">
             <span class="section-eyebrow">Why Choose Us</span>
-            <h2 class="section-title mt-2">The <?php echo e(salon_name()); ?> Difference</h2>
+            <h2 class="section-title mt-2">The <?php echo e(app_name()); ?> Difference</h2>
         </div>
         <div class="row g-4">
             <div class="col-md-4">
@@ -371,7 +371,7 @@ function home_module_icon(array $module): string
             <div class="col-md-4">
                 <div class="testimonial-card">
                     <div class="stars mb-2"><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i><i class="bi bi-star-fill"></i></div>
-                    <p class="mb-3">"The bridal makeup was absolutely stunning. I felt beautiful all day long. Highly recommend <?php echo e(salon_name()); ?>!"</p>
+                    <p class="mb-3">"The bridal makeup was absolutely stunning. I felt beautiful all day long. Highly recommend <?php echo e(app_name()); ?>!"</p>
                     <div class="d-flex align-items-center gap-2">
                         <span class="avatar">HS</span>
                         <div><div class="fw-bold small">Hanna Selam</div><div class="small text-muted">Bridal Makeup</div></div>
@@ -474,7 +474,7 @@ function home_module_icon(array $module): string
             <div class="col-lg-4">
                 <div class="d-flex align-items-center gap-2 mb-3">
                     <span class="brand-mark"><i class="bi bi-scissors"></i></span>
-                    <span class="fw-bold text-white"><?php echo e(salon_name()); ?></span>
+                    <span class="fw-bold text-white"><?php echo e(app_name()); ?></span>
                 </div>
                 <p class="small mb-3">Your beauty, our passion. Premium beauty services delivered with care and professionalism.</p>
                 <div class="d-flex gap-2">
@@ -515,7 +515,7 @@ function home_module_icon(array $module): string
         </div>
         <hr class="border-secondary my-4" style="opacity:.25;">
         <div class="text-center small" style="color:#b5aaa6;">
-            &copy; <?php echo date('Y'); ?> <?php echo e(salon_name()); ?> · Beauty-php-ai · All rights reserved.
+            &copy; <?php echo date('Y'); ?> <?php echo e(app_name()); ?> · All rights reserved.
         </div>
     </div>
 </footer>

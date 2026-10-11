@@ -59,12 +59,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         } elseif ($time === '') {
             $error = 'Please choose an available time.';
         } else {
+            /* Public booking resolves the salon the same way the public site does
+               (default_salon_id()); every write and lookup is pinned to it so a
+               request can never land in, or notify, another tenant. */
+            $salonId = default_salon_id();
             try {
                 $stmt = db()->prepare(
-                    'INSERT INTO waitlist (customer_id, name, phone, service_id, preferred_date, preferred_time, notes, status)
-                     VALUES (NULL, :name, :phone, :service, :date, :time, :notes, "waiting")'
+                    'INSERT INTO waitlist (salon_id, customer_id, name, phone, service_id, preferred_date, preferred_time, notes, status)
+                     VALUES (:sid, NULL, :name, :phone, :service, :date, :time, :notes, "waiting")'
                 );
                 $stmt->execute([
+                    'sid'     => $salonId,
                     'name'    => $name,
                     'phone'   => $phone,
                     'service' => $service ?: null,
@@ -75,8 +80,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 $serviceName = '';
                 if ($service > 0) {
-                    $lookup = db()->prepare('SELECT name FROM services WHERE id = :id');
-                    $lookup->execute(['id' => $service]);
+                    $lookup = db()->prepare('SELECT name FROM services WHERE id = :id AND salon_id = :sid');
+                    $lookup->execute(['id' => $service, 'sid' => $salonId]);
                     $serviceName = (string)$lookup->fetchColumn();
                 }
 
@@ -84,7 +89,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 $adminIds = [];
                 try {
-                    $stmt = db()->query('SELECT id FROM users WHERE role = "admin"');
+                    $stmt = db()->prepare('SELECT id FROM users WHERE role = "admin" AND salon_id = :sid');
+                    $stmt->execute(['sid' => $salonId]);
                     foreach ($stmt->fetchAll() as $r) {
                         $adminIds[] = (int)$r['id'];
                     }
@@ -95,7 +101,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     'New booking request',
                     "{$name} ({$phone}) requested {$serviceName} on " . date('M j, Y', strtotime($date)) . ' at ' . fmt_time($time),
                     'info',
-                    $adminIds ?: null
+                    $adminIds ?: null,
+                    'appointment_created'
                 );
 
                 $success = 'Your booking request has been received. Our team will contact you on ' . e($phone) . ' to confirm your appointment. Thank you!';

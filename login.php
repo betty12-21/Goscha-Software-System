@@ -39,7 +39,7 @@ $page_title = 'Login';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login · <?php echo e(salon_name()); ?></title>
+    <title>Login · <?php echo e(app_name()); ?></title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>💇‍♀️</text></svg>">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
@@ -52,7 +52,7 @@ $page_title = 'Login';
     <div class="auth-card">
         <a href="index.php" class="auth-logo"><i class="bi bi-scissors"></i></a>
         <h1 class="auth-title h3 text-center mb-1">Welcome Back</h1>
-        <p class="auth-subtitle text-center mb-4">Sign in to your <?php echo e(salon_name()); ?> workspace</p>
+        <p class="auth-subtitle text-center mb-4">Sign in to your <?php echo e(app_name()); ?> workspace</p>
 
         <?php if ($error): ?>
             <div class="alert alert-danger rounded-3 shadow-sm py-2"><i class="bi bi-exclamation-circle me-2"></i><?php echo e($error); ?></div>
