@@ -132,9 +132,18 @@ function attempt_login(string $email, string $password, bool $remember = false):
         $salonStatus = $salonStmt->fetchColumn();
 
         if ($salonStatus !== 'active') {
+            $message = match ($salonStatus) {
+                'pending'   => 'Your salon registration is awaiting approval. Please try again once it has been activated.',
+                'suspended' => 'This salon is currently suspended. Please contact support.',
+                'inactive'  => 'This salon is inactive. Please contact support.',
+                'rejected'  => 'This salon registration was not approved. Please contact support.',
+                'cancelled' => 'This salon account has been cancelled. Please contact support.',
+                default     => 'This salon is not active. Please contact support.',
+            };
+
             return [
                 'success' => false,
-                'error'   => 'This salon is not active. Please contact support.',
+                'error'   => $message,
             ];
         }
     } catch (Throwable $e) {

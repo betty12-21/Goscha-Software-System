@@ -89,6 +89,18 @@ function require_login(): void
        signs the user out (rather than silently falling back to another salon)
        when the account has no tenant, so no module can ever run unscoped. */
     require_salon_context();
+
+    /* Second gate: the salon's module grants. A module switched off by the
+       platform operator is refused here, server-side, so a bookmarked or
+       typed-in URL cannot bypass a hidden sidebar link. A disabled module is
+       refused exactly like a missing role permission; render_forbidden()
+       (not a redirect) avoids a loop when the disabled module is the
+       dashboard itself. */
+    $moduleKey = module_key_for_script(basename((string)($_SERVER['SCRIPT_NAME'] ?? '')));
+
+    if ($moduleKey !== null && !can_access_module($moduleKey)) {
+        render_forbidden();
+    }
 }
 
 /**
@@ -122,7 +134,7 @@ function require_permission(string $permission): void
 {
     require_login();
 
-    if (!can($permission)) {
+    if (!can_access_module($permission)) {
         render_forbidden();
     }
 }

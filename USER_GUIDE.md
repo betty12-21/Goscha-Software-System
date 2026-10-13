@@ -15,6 +15,8 @@ Two roles exist, and they see different menus.
 | **Admin** | Everything: customers, staff, services, appointments, walk-ins, payments, invoices, calendar, notifications, inventory, suppliers, payroll, reports, users, audit logs, settings. |
 | **Receptionist** | Front-desk work only: dashboard, customers, appointments, calendar, walk-ins, services (view only), payments, invoices, notifications. |
 
+The two roles above belong to a salon. A separate **Super Admin** (platform operator) sits above every salon and uses the control panel at `super-admin/` — see section 16.
+
 Rules to remember:
 - Receptionists **cannot** add or edit services — only view them.
 - Only admins can manage staff, users, settings, reports, payroll, inventory and suppliers.
@@ -237,3 +239,23 @@ Open **Settings** — it has tabs:
 - Collect bank transfer references at the desk.
 - End each day with **Reports** to reconcile money and **Invoices** to hand out receipts.
 - Back up the database from **Settings → Backup** regularly.
+
+---
+
+## 16. Super Admin control panel (platform operator)
+
+If you run the platform (the software vendor, not a salon), use the control panel at `http://localhost/Beauty%20salon/super-admin/login.php`. It is completely separate from salon logins.
+
+**Signing in.** Use the operator email and password created by `scripts/provision_super_admin.php`. After 5 failed attempts from the same address, login is locked for 15 minutes.
+
+**Approving new salons.** When a salon registers through the public signup form it is saved as **pending** and cannot sign in. Open **Accounts**, open the salon, and choose **Approve** (optionally give a reason). The owner can then sign in. You can also **reject**, **suspend**, **restore**, set **inactive**, or **cancel** a salon — suspension and cancellation immediately block that salon's users.
+
+**Module permissions.** Open **Access Control**, pick a salon, then either:
+- apply a **plan** — Standard (9 core modules), Professional (adds staff + reports) or Full (all 15), or
+- tick/clear individual modules and **Save**.
+
+The change is enforced on the salon's very next request — a disabled module is blocked even if someone types its URL directly.
+
+**Audit log.** Every operator action (login, status change, module edit) is recorded under **Audit Logs**.
+
+**Your profile.** Change your own name, email and password under **My Profile**. Changing the password requires the current one.

@@ -76,9 +76,14 @@ $userId  = (int)($r['user_id'] ?? 0);
 if ($salonId > 0) {
     $s = db()->query("SELECT * FROM salons WHERE id = {$salonId}")->fetch();
     ok('salon row exists', (bool)$s, $s['salon_name'] ?? '');
-    ok('salon is active', ($s['status'] ?? '') === 'active');
+    ok('salon waits in pending', ($s['status'] ?? '') === 'pending', (string)($s['status'] ?? ''));
     ok('salon stamped setup_completed_at', !empty($s['setup_completed_at']));
     ok('owner names stored', ($s['owner_first_name'] ?? '') === 'Sarah' && ($s['owner_last_name'] ?? '') === 'Bello');
+
+    if (access_modules_schema_ready()) {
+        $mc = db()->query("SELECT COUNT(*) FROM salon_modules WHERE salon_id = {$salonId} AND enabled = 1")->fetchColumn();
+        ok('module grants seeded for the new salon', (int)$mc === count(module_keys()), "got {$mc}");
+    }
 
     $h = db()->query("SELECT COUNT(*) c, SUM(is_open) o FROM business_hours WHERE salon_id = {$salonId}")->fetch();
     ok('7 weekly-hours rows', (int)$h['c'] === 7, "got {$h['c']}");
@@ -188,8 +193,16 @@ ok('database wins over a forged session salon_id', $real === $salonId, "resolved
 
 section('8. login binds the session to the salon');
 $_SESSION = [];
+$pending = attempt_login('sarah@bellabeauty.test', 'Str0ngPass!23');
+ok('a pending salon cannot sign in yet', empty($pending['success']));
+ok('the refusal explains approval', stripos((string)($pending['error'] ?? ''), 'approval') !== false, $pending['error'] ?? '');
+ok('no session opened for a pending salon', empty($_SESSION['salon_id']));
+
+/* Approve the salon the way the Super Admin panel does, then login works. */
+db()->prepare("UPDATE salons SET status = 'active' WHERE id = :id")->execute(['id' => $salonId]);
+
 $login = attempt_login('sarah@bellabeauty.test', 'Str0ngPass!23');
-ok('login succeeded', !empty($login['success']), $login['error'] ?? '');
+ok('login succeeded once active', !empty($login['success']), $login['error'] ?? '');
 ok('session carries salon_id', (int)($_SESSION['salon_id'] ?? 0) === $salonId, (string)($_SESSION['salon_id'] ?? 'unset'));
 ok('logged-in user resolves the same salon', current_salon_id() === $salonId);
 

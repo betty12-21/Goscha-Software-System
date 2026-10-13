@@ -46,16 +46,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         ]);
 
         if ($result['success']) {
-            /* Sign the new owner straight in, so they land on a dashboard
-               that already carries their salon context. */
-            $login = attempt_login($email, (string)($_POST['reg_password'] ?? ''));
-
-            if ($login['success']) {
-                flash_set('success', 'Welcome! Your salon "' . $salonName . '" is ready.');
-                redirect(home_url());
-            }
-
-            flash_set('success', 'Your salon "' . $salonName . '" has been created. Please sign in.');
+            /* Registration no longer signs the owner in: a platform operator
+               reviews the request first, so we send them to the login screen
+               with a clear "pending approval" message. */
+            flash_set('success', 'Thank you! Your salon "' . $salonName . '" has been submitted for approval. You will be able to sign in once a platform operator activates it.');
             redirect(base_url('login.php'));
         }
 
@@ -85,6 +79,10 @@ $page_title = 'Register Your Business';
         <a href="index.php" class="auth-logo"><i class="bi bi-scissors"></i></a>
         <h1 class="auth-title h3 text-center mb-1">Register Your Business</h1>
         <p class="auth-subtitle text-center mb-4">Create your salon and owner account</p>
+
+        <div class="alert alert-light border rounded-3 shadow-sm py-2 small text-muted">
+            <i class="bi bi-info-circle me-2"></i>New salons are reviewed by a platform operator before activation.
+        </div>
 
         <?php if ($error): ?>
             <div class="alert alert-danger rounded-3 shadow-sm py-2">

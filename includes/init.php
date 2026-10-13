@@ -20,6 +20,15 @@ require_once __DIR__ . '/tenant.php';
 require_once __DIR__ . '/salon_registration.php';
 
 require_once __DIR__ . '/permissions.php';
+
+/* Per-salon module grants (Super Admin panel). Loaded after permissions.php
+   because can_access_module() builds on can(). */
+require_once __DIR__ . '/access_control.php';
+
+/* Platform operator layer (Super Admin Control Panel). Loaded after
+   access_control.php so the panel can grant modules. */
+require_once __DIR__ . '/super_admin.php';
+
 require_once __DIR__ . '/alerts.php';
 require_once __DIR__ . '/service-picker.php';
 

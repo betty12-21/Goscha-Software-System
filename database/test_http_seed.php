@@ -20,6 +20,15 @@
 
 require_once __DIR__ . '/../config/database.php';
 
+/* The module catalogue lives in includes/access_control.php. It only blocks
+   direct web access, so it is safe to load here; doing so keeps the seeded
+   module grants in step with the real catalogue. Without explicit grants the
+   module gate in require_login() would forbid every page for these tenants. */
+if (!defined('APP_INIT')) {
+    define('APP_INIT', true);
+}
+require_once __DIR__ . '/../includes/access_control.php';
+
 if (PHP_SAPI !== 'cli') {
     exit('CLI only.');
 }
@@ -41,13 +50,18 @@ $pdo = new PDO('mysql:host=' . DB_HOST . ';dbname=' . DB_NAME . ';charset=utf8mb
 
 /* Fresh slate for the tenant tables only. */
 $pdo->exec('SET FOREIGN_KEY_CHECKS = 0');
-foreach ([
+$hasModules = (bool)$pdo->query("SHOW TABLES LIKE 'salon_modules'")->fetchColumn();
+$tables = [
     'payments', 'invoices', 'appointment_services', 'appointments', 'waitlist',
     'customers', 'staff_services', 'staff_working_hours', 'staff_breaks', 'staff',
     'services', 'service_subcategories', 'service_categories',
     'business_breaks', 'business_hours', 'notifications', 'salon_settings',
     'settings', 'audit_logs', 'users', 'salons',
-] as $t) {
+];
+if ($hasModules) {
+    array_unshift($tables, 'salon_modules');
+}
+foreach ($tables as $t) {
     $pdo->exec("TRUNCATE TABLE `{$t}`");
 }
 $pdo->exec('SET FOREIGN_KEY_CHECKS = 1');
@@ -69,11 +83,22 @@ $tenants = [
 
 $apptDate = date('Y-m-d');   /* today, so dashboards show it */
 
+$moduleStmt = $hasModules
+    ? $pdo->prepare('INSERT INTO salon_modules (salon_id, module_key, enabled) VALUES (:sid, :k, 1)')
+    : null;
+
 foreach ($tenants as $sid => $t) {
     $pdo->prepare(
         'INSERT INTO salons (id, salon_name, owner_first_name, owner_last_name, email, status, setup_completed_at)
          VALUES (:id, :name, :of, :ol, :email, "active", NOW())'
     )->execute(['id' => $sid, 'name' => $t['salon'], 'of' => $t['first'], 'ol' => $t['last'], 'email' => $t['email']]);
+
+    /* Give the tenant every module so the control-panel gate lets its owner in. */
+    if ($moduleStmt !== null) {
+        foreach (module_keys() as $k) {
+            $moduleStmt->execute(['sid' => $sid, 'k' => $k]);
+        }
+    }
 
     $pdo->prepare(
         'INSERT INTO salon_settings (salon_id, salon_name, owner_first_name, owner_last_name, setup_completed_at)

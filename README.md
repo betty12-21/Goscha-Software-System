@@ -9,9 +9,15 @@ A complete beauty salon booking and appointment management system built with **P
 | Role           | Email                          | Password      |
 |----------------|--------------------------------|---------------|
 | Administrator  | `admin@beautyphpai.com`        | `Admin@123`   |
-| Receptionist   | `receptionist@beautyphpai.com` | `Reception@123`|
+| Super Admin account  | `superadmin@gmail.com` | `Superadmin123`|
 
 ---
+
+
+URL: http://localhost/Beauty%20salon/super-admin/login.php
+Email: superadmin@gmail.com
+Password: Superadmin@123
+
 
 ## Quick setup (XAMPP)
 
@@ -26,6 +32,19 @@ A complete beauty salon booking and appointment management system built with **P
    `http://localhost/Beauty-php-ai/`
 
 No additional configuration is required. The database config lives in `config/database.php` (defaults: root user, no password).
+
+### Enabling the Super Admin control panel (existing installs)
+
+The base schema covers the salon application. The platform control panel needs one migration and a first operator:
+
+```
+C:\xampp\mysql\bin\mysql.exe -u root beauty_php_ai < database\migrations\004_super_admin.sql
+
+set BEAUTY_DB_ALLOW_WRITE=1
+C:\xampp\php\php.exe scripts\provision_super_admin.php --email=you@example.com --name="Your Name"
+```
+
+`provision_super_admin.php` prints a one-time password to the console (or pass `--password=`). Sign in at `http://localhost/Beauty-php-ai/super-admin/login.php`.
 
 ---
 
@@ -67,12 +86,26 @@ No additional configuration is required. The database config lives in `config/da
 - Services (view-only, used during booking)
 - Payments, Invoices, Notifications
 
+### Super Admin (platform operator)
+A separate control panel for the software owner/vendor — **not** a salon user. It lives at `super-admin/`, uses its own `super_admins` table and session keys, and never shares a login with a salon.
+- **Independent login** at `super-admin/login.php` — rate limited (5 failed attempts / 15 min per email+IP) with idle timeout
+- **Dashboard** — salon counts by lifecycle status, pending registrations, recent activity
+- **Salon accounts** — search/filter every salon, open a full account view
+- **Registration approval workflow** — new signups arrive as `pending`; the operator can **approve, reject, suspend, restore, deactivate or cancel** a salon, with a reason. Only `active` salons can sign in, so these changes take effect immediately
+- **Granular module permissions** — switch individual modules on/off per salon (15 modules), or apply a **Standard / Professional / Full** plan. Enforced server-side on the salon's next request
+- **Platform audit log** — every control-panel action (login, lifecycle change, module edit) is recorded
+- **My profile** — the operator maintains their own name, email and password
+
+New salons self-register through the public signup form and **cannot sign in until approved**. Approval is done from the control panel.
+
 ### Security
 - CSRF tokens on all forms
 - Password hashing with `password_hash()` (bcrypt)
 - Session timeout enforcement
 - Remember-me with secure token storage
 - Role-based access control enforced server-side on every request
+- Per-salon module grants enforced server-side (second gate on top of roles)
+- Login rate limiting on the Super Admin panel
 - PDO prepared statements (no SQL injection)
 
 ---
@@ -96,16 +129,26 @@ Beauty-php-ai/
 │   ├── functions.php          # Global helpers
 │   ├── auth.php               # Login, remember-me, session timeout
 │   ├── permissions.php        # Role-based authorization
+│   ├── tenant.php             # Multi-tenant scoping
+│   ├── salon_registration.php # Public signup -> pending salon + owner
+│   ├── access_control.php     # Per-salon module catalogue + grants
+│   ├── super_admin.php        # Platform operator core (lifecycle, audit, login)
 │   ├── alerts.php             # Flash messages
 │   ├── header.php             # App shell header
 │   ├── navbar.php             # Top navigation bar
 │   ├── sidebar.php            # Sidebar navigation
+│   ├── super-admin/           # Control-panel shell (header.php, footer.php)
 │   └── footer.php             # App shell footer + confirm modal + scripts
 ├── assets/
 │   ├── css/style.css          # Full design system
+│   ├── css/super-admin.css    # Control-panel styling
 │   └── js/app.js              # Shared JS (charts, table filters, sidebar)
 ├── database/
-│   └── beauty_php_ai.sql      # Full schema + demo data (21 tables)
+│   ├── beauty_php_ai.sql      # Full schema + demo data (21 tables)
+│   ├── migrations/            # Incremental schema changes (e.g. 004_super_admin.sql)
+│   └── test_*.php             # Acceptance suites
+├── scripts/
+│   └── provision_super_admin.php  # CLI: create the first operator
 ├── modules/
 │   ├── dashboard.php
 │   ├── customers.php
@@ -133,6 +176,15 @@ Beauty-php-ai/
 │   ├── dashboard.php
 │   ├── ... (10 files)
 │   └── notifications.php
+├── super-admin/               # Platform control panel (require_super_admin())
+│   ├── login.php
+│   ├── logout.php
+│   ├── dashboard.php
+│   ├── accounts.php
+│   ├── account-details.php
+│   ├── access-control.php
+│   ├── audit-logs.php
+│   └── profile.php
 └── uploads/                    # Logo and file uploads
 ```
 

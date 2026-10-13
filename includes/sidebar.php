@@ -4,9 +4,11 @@
  * Expects: $active
  *
  * Each item: permission key => [label, icon, adminOnly].
- * Items are shown ONLY when the current user's role grants the
- * matching permission (see includes/permissions.php). The Receptionist
- * therefore never sees Staff Management, Users, Payroll, etc.
+ * Items are shown ONLY when the current user's role grants the matching
+ * permission (see includes/permissions.php) AND the salon has the matching
+ * module enabled (see includes/access_control.php). The Receptionist
+ * therefore never sees Staff Management, Users, Payroll, etc., and a module
+ * the platform operator switched off is hidden from every role.
  */
 
 $user = current_user();
@@ -49,7 +51,7 @@ $items = [
             if ($adminOnly && !$isAdmin) {
                 continue;
             }
-            if (!can($key)) {
+            if (!can_access_module($key)) {
                 continue;
             }
 

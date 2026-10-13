@@ -237,7 +237,7 @@ function register_salon(array $in): array
         $salonStmt = $pdo->prepare(
             'INSERT INTO salons
                 (salon_name, owner_first_name, owner_last_name, email, phone, status, setup_completed_at)
-             VALUES (:name, :of, :ol, :email, :phone, \'active\', NOW())'
+             VALUES (:name, :of, :ol, :email, :phone, \'pending\', NOW())'
         );
         $salonStmt->execute([
             'name'  => $salonName,
@@ -294,6 +294,13 @@ function register_salon(array $in): array
 
         if (!$account['success']) {
             throw new RuntimeException((string)($account['error'] ?? 'The account could not be created.'));
+        }
+
+        /* Give the salon an explicit module grant from day one. It is a full
+           grant; the platform operator can narrow it from the control panel
+           without which the salon would have nothing enabled. */
+        if (function_exists('seed_salon_modules')) {
+            seed_salon_modules($salonId, 'full');
         }
 
         if ($ownTransaction) {

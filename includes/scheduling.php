@@ -260,6 +260,13 @@ function require_setup_completed(): void
         return;
     }
 
+    /* The Super Admin Control Panel is platform-level and has no tenant, so
+       the salon setup wizard must never intercept it — even on a fresh
+       install where no salon exists yet. */
+    if (strpos((string)($_SERVER['SCRIPT_NAME'] ?? ''), 'super-admin') !== false) {
+        return;
+    }
+
     if (!scheduling_schema_ready()) {
         http_response_code(500);
         exit('This installation needs its scheduling tables. '

@@ -1,0 +1,422 @@
+/* ============================================================
+   Beauty-php-ai / Goscha Software — Super Admin Control Panel.
+   Separate visual language from the salon dashboard: a dark
+   "operator console" shell, so it is never mistaken for a
+   tenant's workspace.
+   ============================================================ */
+
+.sa-page {
+    background: #f2f0ee;
+    min-height: 100vh;
+}
+
+.sa-app {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* ------------------------------------------------------------
+   Sidebar
+   ============================================================ */
+.sa-sidebar {
+    width: 250px;
+    flex: 0 0 250px;
+    background: #17141a;
+    color: #cfc7c4;
+    display: flex;
+    flex-direction: column;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    z-index: 1040;
+}
+
+.sa-brand {
+    display: flex;
+    align-items: center;
+    gap: .7rem;
+    padding: 1.15rem 1.25rem;
+    border-bottom: 1px solid rgba(255, 255, 255, .07);
+}
+
+.sa-brand-mark {
+    width: 38px;
+    height: 38px;
+    border-radius: 12px;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(135deg, var(--bsai-gold), #a8813a);
+    color: #2c2625;
+    font-size: 1.15rem;
+    flex: none;
+}
+
+.sa-brand-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.15;
+}
+
+.sa-brand-text strong {
+    color: #fff;
+    font-size: .98rem;
+    letter-spacing: .2px;
+}
+
+.sa-brand-text small {
+    color: #b6afa9;
+    font-size: .72rem;
+}
+
+.sa-nav {
+    padding: 1rem .75rem;
+    display: flex;
+    flex-direction: column;
+    gap: .25rem;
+    overflow-y: auto;
+}
+
+.sa-nav-link {
+    display: flex;
+    align-items: center;
+    gap: .7rem;
+    padding: .6rem .8rem;
+    border-radius: .7rem;
+    color: #cfc8c2;
+    text-decoration: none;
+    font-size: .9rem;
+    transition: background .15s ease, color .15s ease;
+}
+
+.sa-nav-link i {
+    font-size: 1.05rem;
+    width: 1.3rem;
+    text-align: center;
+}
+
+.sa-nav-link:hover {
+    background: rgba(255, 255, 255, .06);
+    color: #fff;
+}
+
+.sa-nav-link.active {
+    background: linear-gradient(135deg, var(--bsai-rose), #7c0a28);
+    color: #fff;
+    font-weight: 600;
+}
+
+.sa-sidebar-footer {
+    margin-top: auto;
+    padding: .9rem .75rem;
+    border-top: 1px solid rgba(255, 255, 255, .08);
+}
+
+.sa-logout {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+    padding: .55rem .8rem;
+    border-radius: .7rem;
+    color: #f2b8c6;
+    text-decoration: none;
+    font-size: .88rem;
+}
+
+.sa-logout:hover {
+    background: rgba(220, 53, 69, .18);
+    color: #fff;
+}
+
+/* ------------------------------------------------------------
+   Main column
+   ------------------------------------------------------------ */
+.sa-main {
+    flex: 1 1 auto;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.sa-topbar {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: .85rem 1.25rem;
+    background: #fff;
+    border-bottom: 1px solid var(--bsai-border);
+    position: sticky;
+    top: 0;
+    z-index: 5;
+}
+
+.sa-page-title {
+    font-size: 1.15rem;
+    font-weight: 700;
+    margin: 0;
+    color: var(--bsai-charcoal);
+}
+
+.sa-user {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: .45rem;
+    color: var(--bsai-charcoal-2);
+    font-size: .88rem;
+    background: var(--bsai-cream);
+    border: 1px solid var(--bsai-border);
+    border-radius: 2rem;
+    padding: .35rem .8rem;
+}
+
+.sa-user i {
+    color: var(--bsai-rose);
+    font-size: 1.05rem;
+}
+
+.sa-menu-btn {
+    display: none;
+    border: 1px solid var(--bsai-border);
+    background: #fff;
+    border-radius: .6rem;
+    width: 2.3rem;
+    height: 2.3rem;
+    font-size: 1.2rem;
+    color: var(--bsai-charcoal);
+}
+
+.sa-content {
+    padding: 1.25rem;
+    max-width: 1200px;
+    width: 100%;
+}
+
+/* ------------------------------------------------------------
+   Cards / stats
+   ------------------------------------------------------------ */
+.sa-card {
+    background: #fff;
+    border: 1px solid var(--bsai-border);
+    border-radius: 1rem;
+    box-shadow: var(--bsai-shadow);
+}
+
+.sa-card-body {
+    padding: 1.1rem 1.2rem;
+}
+
+.sa-stat {
+    display: flex;
+    align-items: center;
+    gap: .9rem;
+    padding: 1rem 1.1rem;
+    background: #fff;
+    border: 1px solid var(--bsai-border);
+    border-radius: 1rem;
+    box-shadow: var(--bsai-shadow);
+    height: 100%;
+}
+
+.sa-stat-icon {
+    width: 2.9rem;
+    height: 2.9rem;
+    border-radius: .85rem;
+    display: grid;
+    place-items: center;
+    font-size: 1.35rem;
+    flex: none;
+    background: var(--bsai-blush);
+    color: var(--bsai-rose);
+}
+
+.sa-stat-value {
+    font-size: 1.6rem;
+    font-weight: 800;
+    line-height: 1;
+    color: var(--bsai-charcoal);
+}
+
+.sa-stat-label {
+    font-size: .8rem;
+    color: var(--bsai-muted);
+    text-transform: uppercase;
+    letter-spacing: .4px;
+}
+
+/* ------------------------------------------------------------
+   Table + badges
+   ------------------------------------------------------------ */
+.sa-table {
+    width: 100%;
+    margin: 0;
+}
+
+.sa-table th {
+    font-size: .72rem;
+    text-transform: uppercase;
+    letter-spacing: .4px;
+    color: var(--bsai-muted);
+    font-weight: 600;
+    border-bottom: 1px solid var(--bsai-border);
+    padding: .7rem .9rem;
+    white-space: nowrap;
+}
+
+.sa-table td {
+    padding: .8rem .9rem;
+    border-bottom: 1px solid var(--bsai-border);
+    vertical-align: middle;
+    font-size: .9rem;
+}
+
+.sa-table tr:last-child td {
+    border-bottom: 0;
+}
+
+.sa-status {
+    display: inline-flex;
+    align-items: center;
+    gap: .35rem;
+    border-radius: 2rem;
+    padding: .25rem .7rem;
+    font-size: .74rem;
+    font-weight: 700;
+    letter-spacing: .3px;
+    text-transform: uppercase;
+}
+
+.sa-status-pending   { background: #fff3cd; color: #8a6100; }
+.sa-status-active    { background: #d8f3e3; color: #14663a; }
+.sa-status-inactive  { background: #ececec; color: #555; }
+.sa-status-suspended { background: #ffe1cc; color: #99500a; }
+.sa-status-rejected  { background: #fbd9dd; color: #96152a; }
+.sa-status-cancelled { background: #e2e0e6; color: #4a4453; }
+
+/* ------------------------------------------------------------
+   Module permission matrix
+   ------------------------------------------------------------ */
+.sa-module-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+    gap: .7rem;
+}
+
+.sa-module {
+    display: flex;
+    align-items: center;
+    gap: .7rem;
+    padding: .7rem .85rem;
+    border: 1px solid var(--bsai-border);
+    border-radius: .8rem;
+    background: var(--bsai-cream);
+    cursor: pointer;
+    transition: border-color .15s ease, background .15s ease;
+}
+
+.sa-module:hover {
+    border-color: var(--bsai-rose-soft);
+}
+
+.sa-module input {
+    margin: 0;
+    flex: none;
+}
+
+.sa-module i {
+    color: var(--bsai-rose);
+    font-size: 1.05rem;
+}
+
+.sa-module-label {
+    font-size: .88rem;
+    font-weight: 600;
+    color: var(--bsai-charcoal);
+}
+
+.sa-module-tick {
+    margin-left: auto;
+    font-size: .72rem;
+    color: var(--bsai-muted);
+}
+
+.sa-empty {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--bsai-muted);
+}
+
+.sa-empty i {
+    font-size: 2.6rem;
+    color: var(--bsai-rose-soft);
+    display: block;
+    margin-bottom: .6rem;
+}
+
+/* ------------------------------------------------------------
+   Auth (login) — a darker, dedicated card
+   ------------------------------------------------------------ */
+.sa-auth-page {
+    min-height: 100vh;
+    display: grid;
+    place-items: center;
+    background:
+        radial-gradient(1000px 500px at 15% -10%, rgba(201, 164, 76, .18), transparent),
+        radial-gradient(900px 500px at 100% 110%, rgba(88, 5, 27, .35), transparent),
+        #1c1a1e;
+    padding: 1.5rem;
+}
+
+.sa-auth-card {
+    width: 100%;
+    max-width: 420px;
+    background: #fff;
+    border-radius: 1.25rem;
+    box-shadow: 0 30px 70px rgba(0, 0, 0, .45);
+    padding: 2rem 1.9rem;
+}
+
+.sa-auth-mark {
+    width: 3.4rem;
+    height: 3.4rem;
+    border-radius: 1rem;
+    display: grid;
+    place-items: center;
+    margin: 0 auto 1rem;
+    background: linear-gradient(135deg, var(--bsai-gold), #a8813a);
+    color: #2c2625;
+    font-size: 1.6rem;
+}
+
+.sa-auth-title {
+    font-weight: 800;
+    text-align: center;
+    margin-bottom: .25rem;
+}
+
+.sa-auth-sub {
+    text-align: center;
+    color: var(--bsai-muted);
+    font-size: .88rem;
+    margin-bottom: 1.5rem;
+}
+
+/* ------------------------------------------------------------
+   Responsive
+   ------------------------------------------------------------ */
+@media (max-width: 991.98px) {
+    .sa-sidebar {
+        position: fixed;
+        inset: 0 auto 0 0;
+        transform: translateX(-100%);
+        transition: transform .25s ease;
+    }
+
+    .sa-sidebar.open {
+        transform: translateX(0);
+    }
+
+    .sa-menu-btn {
+        display: inline-grid;
+        place-items: center;
+    }
+}
